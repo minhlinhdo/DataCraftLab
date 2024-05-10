@@ -1,28 +1,14 @@
-function numIslands(grid) {
-  if (grid.length === 0) return 0;
-  let count = 0;
-  for (let i = 0; i < grid.length; i++) {
-    for (let j = 0; j < grid[0].length; j++) {
-      if (grid[i][j] === "1") {
-        dfs(grid, i, j);
-        count++;
+function maxEnvelopes(envelopes) {
+  envelopes.sort((a, b) => a[0] - b[0] || b[1] - a[1]);
+  const dp = new Array(envelopes.length).fill(1);
+  let max = 1;
+  for (let i = 1; i < envelopes.length; i++) {
+    for (let j = 0; j < i; j++) {
+      if (envelopes[i][1] > envelopes[j][1]) {
+        dp[i] = Math.max(dp[i], dp[j] + 1);
+        max = Math.max(max, dp[i]);
       }
     }
   }
-  return count;
-}
-function dfs(grid, i, j) {
-  if (
-    i < 0 ||
-    i >= grid.length ||
-    j < 0 ||
-    j >= grid[0].length ||
-    grid[i][j] === "0"
-  )
-    return;
-  grid[i][j] = "0";
-  dfs(grid, i + 1, j);
-  dfs(grid, i - 1, j);
-  dfs(grid, i, j + 1);
-  dfs(grid, i, j - 1);
+  return max;
 }
