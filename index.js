@@ -1,14 +1,22 @@
-function maxEnvelopes(envelopes) {
-  envelopes.sort((a, b) => a[0] - b[0] || b[1] - a[1]);
-  const dp = new Array(envelopes.length).fill(1);
-  let max = 1;
-  for (let i = 1; i < envelopes.length; i++) {
-    for (let j = 0; j < i; j++) {
-      if (envelopes[i][1] > envelopes[j][1]) {
-        dp[i] = Math.max(dp[i], dp[j] + 1);
-        max = Math.max(max, dp[i]);
-      }
+function canFinish(numCourses, prerequisites) {
+  const graph = new Array(numCourses).fill(0).map(() => []);
+  const inDegree = new Array(numCourses).fill(0);
+  for (const [course, pre] of prerequisites) {
+    graph[pre].push(course);
+    inDegree[course]++;
+  }
+  const queue = [];
+  for (let i = 0; i < numCourses; i++) {
+    if (inDegree[i] === 0) queue.push(i);
+  }
+  let count = 0;
+  while (queue.length) {
+    const course = queue.shift();
+    count++;
+    for (const nextCourse of graph[course]) {
+      inDegree[nextCourse]--;
+      if (inDegree[nextCourse] === 0) queue.push(nextCourse);
     }
   }
-  return max;
+  return count === numCourses;
 }
