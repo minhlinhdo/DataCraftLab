@@ -1,22 +1,31 @@
-function canFinish(numCourses, prerequisites) {
-  const graph = new Array(numCourses).fill(0).map(() => []);
-  const inDegree = new Array(numCourses).fill(0);
-  for (const [course, pre] of prerequisites) {
-    graph[pre].push(course);
-    inDegree[course]++;
-  }
-  const queue = [];
-  for (let i = 0; i < numCourses; i++) {
-    if (inDegree[i] === 0) queue.push(i);
-  }
-  let count = 0;
-  while (queue.length) {
-    const course = queue.shift();
-    count++;
-    for (const nextCourse of graph[course]) {
-      inDegree[nextCourse]--;
-      if (inDegree[nextCourse] === 0) queue.push(nextCourse);
+function spiralOrder(matrix) {
+  if (matrix.length === 0) return [];
+  const result = [];
+  let top = 0;
+  let bottom = matrix.length - 1;
+  let left = 0;
+  let right = matrix[0].length - 1;
+  while (top <= bottom && left <= right) {
+    for (let i = left; i <= right; i++) {
+      result.push(matrix[top][i]);
+    }
+    top++;
+    for (let i = top; i <= bottom; i++) {
+      result.push(matrix[i][right]);
+    }
+    right--;
+    if (top <= bottom) {
+      for (let i = right; i >= left; i--) {
+        result.push(matrix[bottom][i]);
+      }
+      bottom--;
+    }
+    if (left <= right) {
+      for (let i = bottom; i >= top; i--) {
+        result.push(matrix[i][left]);
+      }
+      left++;
     }
   }
-  return count === numCourses;
+  return result;
 }
